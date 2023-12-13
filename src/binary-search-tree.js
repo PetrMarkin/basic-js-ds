@@ -10,6 +10,8 @@ class BinarySearchTree {
 
   constructor() {
     this.list = null;
+    this.left = 0;
+    this.right = 0;
   }
 
   root() {
@@ -17,7 +19,18 @@ class BinarySearchTree {
   }
 
   add(data) {
-
+    if (this.list === null) {
+      this.list = data;
+    } else {
+      if (this.left === 0) {
+        this.left = data;
+      } else {
+        if (this.left > data) {
+          this.left = data;
+        }
+      }
+      this.right = data;
+    }
   }
 
   has(/* data */) {
