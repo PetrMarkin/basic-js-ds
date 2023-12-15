@@ -1,6 +1,6 @@
 const { NotImplementedError } = require('../extensions/index.js');
 
-// const { Node } = require('../extensions/list-tree.js');
+const { Node } = require('../extensions/list-tree.js');
 
 /**
 * Implement simple binary search tree according to task description
@@ -10,8 +10,6 @@ class BinarySearchTree {
 
   constructor() {
     this.list = null;
-    this.left = 0;
-    this.right = 0;
   }
 
   root() {
@@ -19,41 +17,121 @@ class BinarySearchTree {
   }
 
   add(data) {
+    let newNode = new Node(data);
     if (this.list === null) {
-      this.list = data;
+      this.list = newNode;
     } else {
-      if (this.left === 0) {
-        this.left = data;
-      } else {
-        if (this.left > data) {
-          this.left = data;
-        }
-      }
-      this.right = data;
+      this.insertNode(this.list, newNode);
     }
   }
 
-  has(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  insertNode(list, newNode) {
+    if (newNode.data < list.data) {
+      if (list.left === null) {
+        list.left = newNode;
+      } else {
+        this.insertNode(list.left, newNode);
+      }
+    } else {
+      if (list.right === null) {
+        list.right = newNode;
+      } else {
+          this.insertNode(list.right, newNode);
+      }
+    }
   }
 
-  find(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  has(data) {
+    if (this.find(data) === null) {
+      return false;
+    }
+    return true;
   }
 
-  remove(/* data */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  find(data) {
+    if (!this.list) {
+      return null;
+    }
+
+    let currentNode = this.list;
+
+    do {
+      if (currentNode.data === data) {
+        return currentNode;
+      } else if (data < currentNode.data) {
+        currentNode = currentNode.left;
+      } else {
+        currentNode = currentNode.right;
+      }
+    } while (currentNode);
+
+    return null;
+  }
+
+  remove(data) {
+    this.list = removeNode(this.list, data);
+
+    function removeNode(currentNode, data) {
+      if (!currentNode) {
+        return this.list
+      }
+      if (data > currentNode.data) {
+        currentNode.right = removeNode(currentNode.right, data);
+        return currentNode;
+      } else if (data < currentNode.data) {
+        currentNode.left = removeNode(currentNode.left, data);
+        return currentNode;
+      } else {
+        if (!currentNode.left && !currentNode.right) {
+          return null;
+        } 
+        if (!currentNode.left) {
+          currentNode = currentNode.right;
+          return currentNode;
+        }
+        if (!currentNode.right) {
+          currentNode = currentNode.left;
+          return currentNode;
+        }
+        let min = currentNode.right;
+        while (min.left) {
+          min = min.left;
+        }
+        currentNode.data = min.data;
+        currentNode.right = removeNode(currentNode.right, min.data);
+        return currentNode;
+      }
+    }
   }
 
   min() {
-    return this.left;
+    if (!this.left === null) {
+      return null;
+    }
+    let min = 10000000;
+    let currentNode = this.list.left;
+    while (currentNode !== null) {
+      if (min < currentNode.data) {
+        return min;
+      } else {
+        min = currentNode.left.data;
+      }
+    }
   }
 
   max() {
-    return this.right;
+    if (!this.right === null) {
+      return null;
+    }
+    let max = 0;
+    let currentNode = this.list.right;
+    while (currentNode !== null) {
+      if (max > currentNode.data) {
+        return max;
+      } else {
+        max = currentNode.right.data;
+      }
+    }
   }
 }
 
