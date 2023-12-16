@@ -104,34 +104,18 @@ class BinarySearchTree {
     }
   }
 
-  min() {
-    if (!this.left === null) {
-      return null;
-    }
-    let min = 10000000;
-    let currentNode = this.list.left;
-    while (currentNode !== null) {
-      if (min < currentNode.data) {
-        return min;
-      } else {
-        min = currentNode.left.data;
-      }
-    }
+  min(currentNode = this.list) {
+    if (currentNode.left === null) {
+      return currentNode.data;
+    }    
+    return this.min(currentNode.left);
   }
 
-  max() {
-    if (!this.right === null) {
-      return null;
+  max(currentNode = this.list) {
+    if (currentNode.right === null) {
+      return currentNode.data;
     }
-    let max = 0;
-    let currentNode = this.list.right;
-    while (currentNode !== null) {
-      if (max > currentNode.data) {
-        return max;
-      } else {
-        max = currentNode.right.data;
-      }
-    }
+    return this.max(currentNode.right);
   }
 }
 
